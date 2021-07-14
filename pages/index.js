@@ -61,9 +61,9 @@ export default function Home() {
           {seguidores.map((itemAtual) => {
             return (
               <li key={itemAtual}>
-                <a href={`https://github.com/${itemAtual}.png`}>
-                  <img src={itemAtual.image} />
-                  <span>{itemAtual.title}</span>
+                <a href={itemAtual.html_url}>
+                  <img src={itemAtual.avatar_url} />
+                  <span>{itemAtual.login}</span>
                 </a>
               </li>
             );
@@ -168,7 +168,7 @@ export default function Home() {
               {pessoasFavoritas.map((itemAtual) => {
                 return (
                   <li key={itemAtual}>
-                    <a href={`/users/${itemAtual}`}>
+                    <a href={`https://github.com/${itemAtual}`}>
                       <img src={`https://github.com/${itemAtual}.png`} />
                       <span>{itemAtual}</span>
                     </a>
