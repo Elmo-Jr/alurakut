@@ -41,11 +41,7 @@ export default function Home() {
       image: "https://alurakut.vercel.app/capa-comunidade-01.jpg",
     },
   ]);
-  // const comunidades = comunidades[0];
-  // const alteradorDeComunidades/setComunidades = comunidades[1];
 
-  console.log("Nosso teste");
-  // const comunidades = ['Alurakut'];
   const pessoasFavoritas = [
     "elmo-jr",
     "marcobrunodev",
@@ -54,6 +50,40 @@ export default function Home() {
     "omariosouto",
     "peas",
   ];
+
+  function ProfileRelationsBox(propriedades) {
+    return (
+      <ProfileRelationsBoxWrapper>
+        <h2 className="smallTitle">
+          {propriedades.title} ({propriedades.items.length})
+        </h2>
+        <ul>
+          {seguidores.map((itemAtual) => {
+            return (
+              <li key={itemAtual}>
+                <a href={`https://github.com/${itemAtual}.png`}>
+                  <img src={itemAtual.image} />
+                  <span>{itemAtual.title}</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </ProfileRelationsBoxWrapper>
+    );
+  }
+
+  const [seguidores, setSeguidores] = React.useState([]);
+
+  React.useEffect(function () {
+    fetch("https://api.github.com/users/elmo-jr/followers")
+      .then(function (respostaDoServidor) {
+        return respostaDoServidor.json();
+      })
+      .then(function (respostaCompleta) {
+        setSeguidores(respostaCompleta);
+      });
+  }, []);
 
   return (
     <>
@@ -113,6 +143,7 @@ export default function Home() {
           className="profileRelationsArea"
           style={{ gridArea: "profileRelationsArea" }}
         >
+          <ProfileRelationsBox title="Seguidores" items={seguidores} />
           <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">Comunidades ({comunidades.length})</h2>
             <ul>
