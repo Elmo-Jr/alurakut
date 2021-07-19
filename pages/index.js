@@ -9,6 +9,7 @@ import {
   OrkutNostalgicIconSet,
 } from "../src/lib/AlurakutCommons";
 import { ProfileRelationsBoxWrapper } from "../src/components/ProfileRelations";
+import { RecadosBoxWrapper } from "../src/components/Recados";
 
 function ProfileSidebar(propriedades) {
   return (
@@ -37,6 +38,7 @@ function ProfileSidebar(propriedades) {
 export default function Home(props) {
   const usuarioAleatorio = props.githubUser;
   const [comunidades, setComunidades] = React.useState([]);
+  const [recados, setRecados] = React.useState([]);
 
   const pessoasFavoritas = [
     "juunegreiros",
@@ -69,10 +71,51 @@ export default function Home(props) {
     );
   }
 
+  const [Stars, setStars] = React.useState([]);
   const [seguidores, setSeguidores] = React.useState([]);
 
   React.useEffect(function () {
+    fetch("https://api.github.com/repos/Elmo-Jr/alurakut")
+      .then((resposta) => {
+        return resposta.json();
+      })
+      .then(function (respostaRepo) {
+        setStars(respostaRepo.stargazers_count);
+      });
+
     fetch("https://api.github.com/users/elmo-jr/followers")
+      .then(function (respostaDoServidor) {
+        return respostaDoServidor.json();
+      })
+      .then(function (respostaCompleta) {
+        setSeguidores(respostaCompleta);
+      });
+
+    fetch("https://graphql.datocms.com/", {
+      method: "POST",
+      headers: {
+        Authorization: "0ba4c224d0e36f8b4a797123ab1a8e",
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        query: `query{
+                  allRecados{
+                    id
+                    creatorslug
+                    text
+                  }
+                }`,
+      }),
+    })
+      .then((response) => response.json())
+      .then((respostaCompleta) => {
+        const recadosVindosDoDato = respostaCompleta.data.allRecados;
+        setRecados(recadosVindosDoDato);
+      });
+
+    const urlSeguidoires = `https://api.github.com/users/${usuarioAleatorio}/followers`;
+    fetch(urlSeguidoires)
       .then(function (respostaDoServidor) {
         return respostaDoServidor.json();
       })
@@ -101,7 +144,6 @@ export default function Home(props) {
       .then((response) => response.json())
       .then((respostaCompleta) => {
         const comunidadesVindasDoDato = respostaCompleta.data.allCommunities;
-        console.log(comunidadesVindasDoDato);
         setComunidades(comunidadesVindasDoDato);
       });
   }, []);
@@ -116,20 +158,25 @@ export default function Home(props) {
         </div>
         <div className="welcomeArea" style={{ gridArea: "welcomeArea" }}>
           <Box>
-            <h1 className="title">Bem vinde!!</h1>
+            <h1 className="title">Bem vinde!! {usuarioAleatorio}</h1>
 
-            <OrkutNostalgicIconSet />
+            <OrkutNostalgicIconSet
+              sexy={3}
+              confiavel={3}
+              legal={2}
+              fas={Stars}
+            />
           </Box>
 
           <Box>
-            <h2 className="subTitle">O que você deseja fazer?</h2>
+            <h2 className="subTitle">Criar comunidade</h2>
             <form
               onSubmit={function handleCriaComunidade(e) {
                 e.preventDefault();
                 const dadosDoForm = new FormData(e.target);
 
-                console.log("Campo: ", dadosDoForm.get("title"));
-                console.log("Campo: ", dadosDoForm.get("image"));
+                // console.log("Campo: ", dadosDoForm.get("title"));
+                // console.log("Campo: ", dadosDoForm.get("image"));
 
                 const comunidade = {
                   title: dadosDoForm.get("title"),
@@ -171,6 +218,64 @@ export default function Home(props) {
               <button>Criar comunidade</button>
             </form>
           </Box>
+          <Box>
+            <h2 className="subTitle">Deixe um recado</h2>
+            <form
+              onSubmit={function handleCriaComunidade(e) {
+                e.preventDefault();
+                const dadosDoForm = new FormData(e.target);
+
+                const recado = {
+                  text: dadosDoForm.get("text"),
+                  creatorslug: usuarioAleatorio,
+                };
+
+                fetch("/api/recados/", {
+                  method: "Post",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(recado),
+                }).then(async (response) => {
+                  const dados = await response.json();
+                  console.log(dados.registroCriado);
+                  const recado = dados.registroCriado;
+                  const recadosAtualizados = [...recados, recado];
+                  setRecados(recadosAtualizados);
+                });
+              }}
+            >
+              <div>
+                <textarea
+                  placeholder="Escreva seu recado :)"
+                  name="text"
+                  aria-label="Escreva seu recado"
+                  type="text"
+                />
+              </div>
+
+              <button>Enviar</button>
+            </form>
+          </Box>
+          <RecadosBoxWrapper>
+            <h2 className="smallTitle">Recados ({recados.length})</h2>
+            <ul>
+              {recados.map((itemAtual) => {
+                return (
+                  <li key={itemAtual.id}>
+                    <a href={`/recados/${itemAtual.id}`}>
+                      <img
+                        src={`https://github.com/${itemAtual.creatorslug}.png`}
+                      />
+                      <h3>{itemAtual.creatorslug}</h3>
+                      <p>{itemAtual.text}</p>
+                      <p className="clear" />
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </RecadosBoxWrapper>
         </div>
         <div
           className="profileRelationsArea"

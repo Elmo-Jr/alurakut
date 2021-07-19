@@ -41,6 +41,22 @@ const Box = styled.div`
     border-bottom-color: #ecf2fa;
   }
 
+  textarea {
+    font-family: sans-serif;
+    font-size: 13px;
+    width: 100%;
+    background-color: #f4f4f4;
+    color: #333333;
+    border: 0;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    border-radius: 10000px;
+    ::placeholder {
+      color: #333333;
+      opacity: 1;
+    }
+  }
+
   input {
     width: 100%;
     background-color: #f4f4f4;

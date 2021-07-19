@@ -77,7 +77,6 @@ AlurakutMenu.Wrapper = styled.header`
       display: none;
     }
     > div {
-      max-width: 400px;
       margin: auto;
     }
     a {
