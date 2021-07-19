@@ -165,6 +165,7 @@ export default function Home(props) {
               confiavel={3}
               legal={2}
               fas={Stars}
+              recados={recados.length}
             />
           </Box>
 
@@ -262,15 +263,14 @@ export default function Home(props) {
             <ul>
               {recados.map((itemAtual) => {
                 return (
-                  <li key={itemAtual.id}>
-                    <a href={`/recados/${itemAtual.id}`}>
-                      <img
-                        src={`https://github.com/${itemAtual.creatorslug}.png`}
-                      />
+                  <li className="grid" key={itemAtual.id}>
+                    <img
+                      src={`https://github.com/${itemAtual.creatorslug}.png`}
+                    />
+                    <a href={`https://github.com/${itemAtual.creatorslug}`}>
                       <h3>{itemAtual.creatorslug}</h3>
-                      <p>{itemAtual.text}</p>
-                      <p className="clear" />
                     </a>
+                    <p>{itemAtual.text}</p>
                   </li>
                 );
               })}

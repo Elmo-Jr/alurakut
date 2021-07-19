@@ -2,35 +2,39 @@ import styled from "styled-components";
 import Box from "../Box";
 
 export const RecadosBoxWrapper = styled(Box)`
-  ul {
-    max-height: 220px;
+  li {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    grid-template-rows: 20px 1fr;
+    grid-gap: 10px;
+
+    text-decoration: none;
     list-style: none;
+    background: #f3f4de;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
   }
 
   img {
-    float: left;
-    margin: 5px;
-    border-radius: 10px;
-    height: 100px;
+    grid-column: 1/2;
+    grid-row: 1/3;
+    border-radius: 8px;
   }
 
   a {
-    color: #000;
     text-decoration: none;
   }
 
   h3 {
+    line-height: 30px;
     font-size: 15px;
-    color: #db9807;
-    padding: 10px;
-    margin-right: auto;
+    grid-column: 2/3;
+    color: #eba124;
   }
 
   p {
     font-size: 13px;
-  }
-
-  .clear {
-    clear: both;
+    color: #000;
   }
 `;

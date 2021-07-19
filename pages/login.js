@@ -5,7 +5,7 @@ import nookies from "nookies";
 
 export default function LoginScreen() {
   const router = useRouter();
-  const [githubUser, setGithubUser] = React.useState("Elmo-Jr");
+  const [githubUser, setGithubUser] = React.useState("");
 
   return (
     <main
@@ -39,7 +39,6 @@ export default function LoginScreen() {
             className="box"
             onSubmit={(infosDoEvento) => {
               infosDoEvento.preventDefault();
-              // alert('Alguém clicou no botão!')
               console.log("Usuário: ", githubUser);
               fetch("https://alurakut.vercel.app/api/login", {
                 method: "POST",
@@ -68,7 +67,6 @@ export default function LoginScreen() {
                 setGithubUser(evento.target.value);
               }}
             />
-            {githubUser.length === 0 ? "Preencha o campo" : ""}
             <button type="submit">Login</button>
           </form>
 
