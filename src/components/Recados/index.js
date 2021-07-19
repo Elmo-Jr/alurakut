@@ -20,12 +20,14 @@ export const RecadosBoxWrapper = styled(Box)`
   }
 
   h3 {
+    font-size: 15px;
     color: #db9807;
     padding: 10px;
     margin-right: auto;
   }
 
   p {
+    font-size: 13px;
   }
 
   .clear {
